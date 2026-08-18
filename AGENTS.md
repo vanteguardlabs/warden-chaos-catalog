@@ -29,10 +29,11 @@ builds: this repo's `target/` may be root-owned from prior docker builds — pas
   - `catalog_policy_inputs() -> Vec<Value>` — each Rego-decidable attack
     projected to a policy-engine `PolicyInput` for an offline Rego-only
     backtest. Only `Denylist` / `BusinessHours` / `Control` survive the filter;
-    the other 8 categories return `None`: `Injection`/`SupplyChain`/`MultiTurn`
+    the other 9 categories return `None`: `Injection`/`SupplyChain`/`MultiTurn`
     (need brain), `Hil` (live roundtrip), `Identity` (identity layer),
     `Velocity`/`Attestation` (per-request state), `AgentCert` (standing
-    controls spread across layers).
+    controls spread across layers), and `Deception` (proxy/identity decoy
+    state).
   - `Attack { id, category, description, expected, mode }` — `payload_builder` /
     `headers_builder` are private `fn` pointers; reach them via
     `build_payload(request_id)`, `build_headers()`, `policy_input()`, and
@@ -68,7 +69,7 @@ Every payload is valid JSON-RPC except `agent_cert_malformed_mcp`
 it by id). Adding a scenario is non-breaking; renaming a `Category` / `Expected`
 / `Mode` variant is a breaking change that forces a coordinated bump on every
 consumer. Attack `id`s are also load-bearing: `catalog_has_expected_attacks`
-pins ~20 ids and `payloads_are_valid_jsonrpc` exempts `agent_cert_malformed_mcp`
+pins representative ids and `payloads_are_valid_jsonrpc` exempts `agent_cert_malformed_mcp`
 by literal id; consumers key on ids too. Renaming an id is breaking.
 
 Rust house rules: clippy `-D warnings` is the floor; tests stay in
