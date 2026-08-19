@@ -1,11 +1,13 @@
 <!-- public repo — do not add internal topology, secrets, deploy/runbook, strategy, or absolute host paths -->
-# clavenar-chaos-catalog — pure-data attack catalog (path-dep consumed by clavenar-chaos-monkey)
+# clavenar-chaos-catalog — pure-data attack catalog (path-dep consumed by clavenar-chaos-monkey and clavenar-ctl)
 
 Canonical, runner-free source of truth for Clavenar's canned red-team / demo
-scenarios. Lifted out of `clavenar-chaos-monkey` so multiple callers
-(`clavenar-chaos-monkey`, eventually `clavenar-console`'s `/demo/fire`) fire the
-same scenarios. Everything here is plain data — `Clone`/`Debug` structs and
-`fn` (not `Fn`) pointers; no async, no HTTP client, no NATS.
+scenarios. Lifted out of `clavenar-chaos-monkey` so the runner can fire the
+canonical scenarios and `clavenar-ctl` can reuse their certification and
+policy projections. Console keeps a compact inline Policy Lab shortlist to
+avoid adding this path dependency. Everything here is plain data —
+`Clone`/`Debug` structs and `fn` (not `Fn`) pointers; no async, no HTTP client,
+no NATS.
 
 ## Build, test, lint
 ```
