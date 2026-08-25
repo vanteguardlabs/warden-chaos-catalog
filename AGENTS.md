@@ -10,11 +10,12 @@ avoid adding this path dependency. Everything here is plain data —
 no NATS.
 
 ## Build, test, lint
-```
+```bash
 cargo build
 cargo test
 cargo clippy --all-targets -- -D warnings
 cargo deny check all          # advisories / licenses / bans / sources
+cargo cyclonedx --format json --describe crate
 ```
 Edition 2024. `publish = false` — workspace-internal data dependency, not a
 crates.io package. Run: library, no binary — exported via `catalog()`. Host
@@ -66,11 +67,12 @@ builds: this repo's `target/` may be root-owned from prior docker builds — pas
 
 - **Formatting is an owning-CI gate.** Run `cargo fmt --all -- --check`
   before pushing Rust changes; CI runs it before check, test, and clippy.
-Every payload is valid JSON-RPC except `agent_cert_malformed_mcp`
-(intentionally missing `method`; the `payloads_are_valid_jsonrpc` test exempts
-it by id). Adding a scenario is non-breaking; renaming a `Category` / `Expected`
-/ `Mode` variant is a breaking change that forces a coordinated bump on every
-consumer. Attack `id`s are also load-bearing: `catalog_has_expected_attacks`
+- **Payload shape is a compatibility contract.** Every payload is valid
+  JSON-RPC except `agent_cert_malformed_mcp` (intentionally missing `method`;
+  the `payloads_are_valid_jsonrpc` test exempts it by id). Adding a scenario is
+  non-breaking; renaming a `Category` / `Expected` / `Mode` variant is a
+  breaking change that forces a coordinated bump on every consumer. Attack
+  `id`s are also load-bearing: `catalog_has_expected_attacks`
 pins representative ids and `payloads_are_valid_jsonrpc` exempts `agent_cert_malformed_mcp`
 by literal id; consumers key on ids too. Renaming an id is breaking.
 
@@ -80,4 +82,5 @@ Rust house rules: clippy `-D warnings` is the floor; tests stay in
 - Commit subjects must start with a lowercase letter.
 
 ## Pointers
-README.md.
+
+[README](README.md).
